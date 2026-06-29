@@ -257,7 +257,7 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
         messagesUsed: session.messageCount,
         messagesLimit: MAX_MESSAGES,
         limitReached: session.messageCount >= MAX_MESSAGES,
-        keyUsed: i + 1, // debug info (remove in prod if desired)
+        ...(NODE_ENV !== 'production' && { keyUsed: i + 1 }),
       });
     } catch (fetchError) {
       console.error(`[PROXY] Key ${i + 1} fetch error:`, fetchError.message);
@@ -273,13 +273,49 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
   });
 });
 
-// ─── API: Reset Session (for testing only) ───────────────────────
-if (NODE_ENV !== 'production') {
-  app.post('/api/reset', (req, res) => {
+// ─── API: Greet (real AI opening message per bot) ───────────────
+app.post('/api/greet', async (req, res) => {
+  const { botId } = req.body;
+  if (!botId || typeof botId !== 'string') {
+    return res.status(400).json({ error: 'botId é obrigatório.' });
+  }
+  const bot = botsConfig[botId];
+  if (!bot) return res.status(404).json({ error: 'Bot não encontrado.' });
+
+  const greetMessages = [
+    { role: 'system', content: bot.systemPrompt },
+    { role: 'user', content: '[SISTEMA INTERNO] Envie sua mensagem de boas-vindas inicial ao cliente, seguindo exatamente sua persona. Seja caloroso e convide-o a interagir. Máximo 2 frases.' },
+  ];
+
+  for (let i = 0; i < API_KEYS.length; i++) {
+    try {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${API_KEYS[i]}` },
+        body: JSON.stringify({ model: bot.model || 'llama-3.3-70b-versatile', messages: greetMessages, max_tokens: 120, temperature: 0.7 }),
+      });
+      if (!response.ok) continue;
+      const data = await response.json();
+      const greeting = data.choices?.[0]?.message?.content;
+      if (greeting) return res.json({ greeting });
+    } catch { continue; }
+  }
+  // Fallback se todas as keys falharem
+  res.json({ greeting: `Olá! Sou ${bot.name}, assistente virtual da ${bot.business}. Como posso ajudar você hoje?` });
+});
+
+// ─── API: Reset Session ───────────────────────────────────────────
+// Disponível em todos os ambientes — reseta apenas o contador, não o cookie
+app.post('/api/reset', (req, res) => {
+  const session = sessions.get(req.sessionId);
+  if (session) {
+    session.messageCount = 0;
+    session.lastAccess = Date.now();
+  } else {
     sessions.delete(req.sessionId);
-    res.json({ ok: true, message: 'Session reset.' });
-  });
-}
+  }
+  res.json({ ok: true, message: 'Session reset.' });
+});
 
 // ─── Fallback: SPA ───────────────────────────────────────────────
 app.get('*', (req, res) => {

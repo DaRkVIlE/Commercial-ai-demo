@@ -86,23 +86,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function sanitize(str) {
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(String(str)));
+    return div.innerHTML;
+  }
+
   function renderBots(bots) {
     botGrid.innerHTML = '';
     for (const [id, bot] of Object.entries(bots)) {
       const card = document.createElement('div');
       card.className = 'bot-card';
+      const safeIcon = sanitize(bot.icon);
+      const safeName = sanitize(bot.name);
+      const safeBusiness = sanitize(bot.business);
+      const safeTagline = sanitize(bot.tagline);
+      const safeAccent = sanitize(bot.accent);
+      const safeCaps = (bot.capabilities || []).map(c => `<span class="bot-cap-tag">${sanitize(c)}</span>`).join('');
       card.innerHTML = `
         <div class="bot-card-header">
-          <div class="bot-card-icon" style="color: ${bot.accent}; box-shadow: inset 0 0 10px ${bot.accent}40;">${bot.icon}</div>
+          <div class="bot-card-icon" style="color: ${safeAccent}; box-shadow: inset 0 0 10px ${safeAccent}40;">${safeIcon}</div>
           <div class="bot-card-title">
-            <h3>${bot.name}</h3>
-            <span>${bot.business}</span>
+            <h3>${safeName}</h3>
+            <span>${safeBusiness}</span>
           </div>
         </div>
-        <div class="bot-tagline">${bot.tagline}</div>
-        <div class="bot-caps">
-          ${bot.capabilities.map(cap => `<span class="bot-cap-tag">${cap}</span>`).join('')}
-        </div>
+        <div class="bot-tagline">${safeTagline}</div>
+        <div class="bot-caps">${safeCaps}</div>
       `;
       card.addEventListener('click', () => startChat(id, bot));
       botGrid.appendChild(card);
@@ -133,13 +143,23 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Check session limits before opening
     await updateSessionStatus();
-    
     showView('chat');
     
-    // Initial Greeting Mock based on bot name (since system prompt is hidden)
-    setTimeout(() => {
+    // Real AI greeting via /api/greet
+    const typingId = showTypingIndicator();
+    try {
+      const res = await fetch('/api/greet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ botId }),
+      });
+      const data = await res.json();
+      removeTypingIndicator(typingId);
+      addMessage(data.greeting || `Olá! Sou ${botMeta.name}. Como posso ajudar?`, 'bot');
+    } catch {
+      removeTypingIndicator(typingId);
       addMessage(`Olá! Sou ${botMeta.name}, assistente virtual da ${botMeta.business}. Como posso ajudar?`, 'bot');
-    }, 500);
+    }
   }
 
   btnBackToPicker.addEventListener('click', () => {
@@ -242,11 +262,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   btnRestartDemo.addEventListener('click', async () => {
-    // Para reiniciar, apagamos o cookie resetando a sessão (só disponível em dev, mas aqui forçamos reload)
     try {
       await fetch('/api/reset', { method: 'POST' });
     } catch(e) {}
-    window.location.reload();
+    // Esconde o modal e reseta a UI sem reload (funciona em prod)
+    conversionWall.classList.add('hidden');
+    messageCounter.textContent = `Mensagem 0 de 10`;
+    showView('botPicker');
   });
   
 });

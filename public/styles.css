@@ -174,7 +174,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 }
 
 /* ─── Chat Interface ─── */
-#viewChat { height: calc(100vh - 65px); max-width: 800px; }
+#viewChat { height: calc(100vh - 65px); height: calc(100dvh - 65px); max-width: 800px; }
 .chat-header {
   display: flex; align-items: center; gap: 1rem;
   padding: 1rem; border-bottom: 1px solid var(--border-subtle);

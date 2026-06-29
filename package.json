@@ -1,7 +1,8 @@
 {
   "name": "experia-demo-bots",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Public demo platform for Experia commercial AI bots",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
