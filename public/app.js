@@ -36,8 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // ─── Routing / Views ───
   function showView(viewName) {
-    Object.values(views).forEach(v => v.classList.add('hidden'));
+    Object.values(views).forEach(v => {
+      v.classList.add('hidden');
+      v.classList.remove('active-view');
+    });
     views[viewName].classList.remove('hidden');
+    views[viewName].classList.add('active-view');
     
     // Show admin toggle only in chat view
     if (viewName === 'chat') {
