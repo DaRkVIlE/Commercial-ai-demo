@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Experia Bots | Demo Pública</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header Global -->
+  <header class="app-header">
+    <div class="header-logo">
+      <span class="logo-text">Experia</span>
+      <span class="logo-accent">Bots</span>
+    </div>
+    
+    <!-- Header Admin Toggle (Mock) -->
+    <div class="admin-toggle" id="adminToggleContainer" style="display: none;">
+      <label class="switch">
+        <input type="checkbox" id="adminSwitch">
+        <span class="slider round"></span>
+      </label>
+      <span class="toggle-label" id="toggleLabel">👤 Cliente</span>
+    </div>
+  </header>
+
+  <!-- View 1: Onboarding Carousel -->
+  <div id="viewOnboarding" class="view active-view">
+    <div class="carousel-container">
+      <div class="slides-wrapper" id="slidesWrapper">
+        
+        <!-- Slide 1 -->
+        <div class="slide">
+          <div class="slide-icon">🚀</div>
+          <h2>O que são Assistentes Comerciais?</h2>
+          <p>Imagine um atendente que <strong>nunca dorme</strong>, nunca esquece o cardápio e responde aos seus clientes em 2 segundos.</p>
+          <p>Isso é a Experia Bots.</p>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+          <div class="slide-icon">🔄</div>
+          <h2>Como funciona?</h2>
+          <p>1. O cliente envia uma mensagem no WhatsApp.<br>
+             2. O Bot responde com o contexto exato do seu negócio.<br>
+             3. Você recebe os dados qualificados prontos para fechamento.</p>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+          <div class="slide-icon">🎯</div>
+          <h2>Escolha e Teste</h2>
+          <p>Selecione um dos nossos modelos operacionais abaixo e converse com eles agora mesmo. Sem amarras.</p>
+          <button class="btn-primary mt-4" id="btnStartDemo">Ver Bots Disponíveis</button>
+        </div>
+      </div>
+      
+      <div class="carousel-indicators">
+        <div class="indicator active"></div>
+        <div class="indicator"></div>
+        <div class="indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- View 2: Bot Picker -->
+  <div id="viewBotPicker" class="view hidden">
+    <div class="picker-header">
+      <h2>Escolha seu Assistente</h2>
+      <p>Qual segmento melhor representa o seu negócio?</p>
+    </div>
+    <div class="bot-grid" id="botGrid">
+      <!-- Injetado via JS -->
+      <div class="loading-bots">Carregando bots...</div>
+    </div>
+  </div>
+
+  <!-- View 3: Chat Interface -->
+  <div id="viewChat" class="view hidden">
+    
+    <div class="chat-header">
+      <button class="btn-back" id="btnBackToPicker">← Voltar</button>
+      <div class="chat-bot-info">
+        <span class="chat-icon" id="chatHeaderIcon">🤖</span>
+        <div class="chat-title-group">
+          <h3 id="chatHeaderName">Bot</h3>
+          <span class="chat-status" id="chatHeaderStatus">Online</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Mock Dashboard (Injetado via JS) -->
+    <div id="adminDashboard" class="admin-dashboard hidden">
+      <div class="admin-stats">
+        <div class="stat-card">
+          <span>Interações Hoje</span>
+          <strong>142</strong>
+        </div>
+        <div class="stat-card">
+          <span>Leads Capturados</span>
+          <strong>18</strong>
+        </div>
+      </div>
+      <div class="admin-hint">
+        💡 <strong>Modo Gestor:</strong> Como administrador, você recebe resumos estruturados das interações, mas não interfere diretamente no chat público a menos que assuma a conversa.
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <!-- Mensagens Injetadas via JS -->
+    </div>
+
+    <div class="chat-input-area">
+      <div class="message-counter" id="messageCounter">Mensagem 0 de 10</div>
+      <form id="chatForm">
+        <input type="text" id="chatInput" placeholder="Digite sua mensagem..." autocomplete="off">
+        <button type="submit" id="btnSend">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- View 4: Conversion Wall Modal -->
+  <div id="conversionWall" class="modal-overlay hidden">
+    <div class="modal-content glass-card">
+      <div class="modal-icon">🌟</div>
+      <h2>Chegamos ao limite da demonstração!</h2>
+      <p>Você utilizou as 10 mensagens de teste gratuito.</p>
+      <p>Gostou de ver a inteligência artificial em ação? Para continuar testando, calibrar os prompts e acessar a plataforma completa para gestores, crie sua conta.</p>
+      
+      <div class="modal-actions">
+        <a href="https://chat.experiasolutions.com.br/register" class="btn-primary full-width" target="_blank">Criar Conta Gratuita</a>
+        <button class="btn-text" id="btnRestartDemo">Testar outro segmento (Reiniciar)</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
