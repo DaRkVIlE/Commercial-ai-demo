@@ -285,13 +285,12 @@ button, .btn-primary, .btn-aiox-download {
 .full-width { width: 100%; }
 
 /* ─── Onboarding Carousel ─── */
-.carousel-container { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center;}
-.slides-wrapper { display: flex; width: 100%; max-width: 600px; overflow: hidden; position: relative; height: 300px;}
-.slide { min-width: 100%; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); position: absolute; top: 0; left: 0; opacity: 0; }
-.slide.active { opacity: 1; position: relative; }
+.carousel-container { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center; overflow: hidden; width: 100%; }
+.slides-wrapper { display: flex; width: 100%; max-width: 600px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); align-items: center; }
+.slide { flex: 0 0 100%; min-width: 100%; padding: 0 16px; opacity: 1; position: relative; }
 .slide-icon { font-size: 48px; margin-bottom: 24px; }
 .slide h2 { font-size: 32px; margin-bottom: 16px; }
-.slide p { color: #9C9C9C; font-size: 18px; line-height: 1.6; }
+.slide p { color: #9C9C9C; font-size: 18px; line-height: 1.6; margin-bottom: 16px; }
 .carousel-indicators { display: flex; gap: 12px; margin-top: 32px; }
 .indicator { width: 8px; height: 8px; background: var(--border-strong); cursor: pointer; transition: background 0.2s; border-radius: 0; }
 .indicator.active { background: var(--primary); box-shadow: var(--lime-glow); }
