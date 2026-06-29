@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       adminToggleContainer.style.display = 'none';
       isAdminMode = false;
       adminSwitch.checked = false;
-      toggleLabel.textContent = '👤 Cliente';
+      toggleLabel.textContent = '👤 Atendente';
       adminDashboard.classList.add('hidden');
     }
   }
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── Admin Mode Logic ───
   adminSwitch.addEventListener('change', (e) => {
     isAdminMode = e.target.checked;
-    toggleLabel.textContent = isAdminMode ? '⚙️ Gestor' : '👤 Cliente';
+    toggleLabel.textContent = isAdminMode ? '🤖 Assistente' : '👤 Atendente';
     
     if (isAdminMode) {
       adminDashboard.classList.remove('hidden');

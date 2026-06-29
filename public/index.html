@@ -3,18 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Experia Bots | Demo Pública</title>
+  <title>Experia AI Lab | Demo Pública</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- AIOX Viewport Grid -->
+  <div class="viewport-grid">
+    <div class="viewport-grid-line"></div>
+    <div class="viewport-grid-line"></div>
+    <div class="viewport-grid-line"></div>
+    <div class="viewport-grid-line"></div>
+    <div class="viewport-grid-line"></div>
+  </div>
+
   <!-- Header Global -->
   <header class="app-header">
     <div class="header-logo">
-      <span class="logo-text">Experia</span>
-      <span class="logo-accent">Bots</span>
+      <span class="logo-text">[AIOX]</span>
+      <span class="logo-accent">EXPERIA LAB</span>
     </div>
     
     <!-- Header Admin Toggle (Mock) -->
@@ -23,7 +32,7 @@
         <input type="checkbox" id="adminSwitch">
         <span class="slider round"></span>
       </label>
-      <span class="toggle-label" id="toggleLabel">👤 Cliente</span>
+      <span class="toggle-label" id="toggleLabel">👤 Atendente</span>
     </div>
   </header>
 
@@ -34,16 +43,16 @@
         
         <!-- Slide 1 -->
         <div class="slide">
-          <div class="slide-icon">🚀</div>
-          <h2>O que são Assistentes Comerciais?</h2>
+          <span class="hud-eyebrow">[00] MANIFESTO // CORE BELIEF</span>
+          <h2>A IA é só a seta. O X é seu.</h2>
           <p>Imagine um atendente que <strong>nunca dorme</strong>, nunca esquece o cardápio e responde aos seus clientes em 2 segundos.</p>
           <p>Isso é a Experia Bots.</p>
         </div>
 
         <!-- Slide 2 -->
         <div class="slide">
-          <div class="slide-icon">🔄</div>
-          <h2>Como funciona?</h2>
+          <span class="hud-eyebrow">[01] OPERAÇÃO TÁTICA</span>
+          <h2>Como funciona o sistema?</h2>
           <p>1. O cliente envia uma mensagem no WhatsApp.<br>
              2. O Bot responde com o contexto exato do seu negócio.<br>
              3. Você recebe os dados qualificados prontos para fechamento.</p>
@@ -51,8 +60,8 @@
 
         <!-- Slide 3 -->
         <div class="slide">
-          <div class="slide-icon">🎯</div>
-          <h2>Escolha e Teste</h2>
+          <span class="hud-eyebrow">[02] AMBIENTE DE TESTE</span>
+          <h2>Escolha e Opere.</h2>
           <p>Selecione um dos nossos modelos operacionais abaixo e converse com eles agora mesmo. Sem amarras.</p>
           <button class="btn-primary mt-4" id="btnStartDemo">Ver Bots Disponíveis</button>
         </div>
@@ -69,8 +78,9 @@
   <!-- View 2: Bot Picker -->
   <div id="viewBotPicker" class="view hidden">
     <div class="picker-header">
-      <h2>Escolha seu Assistente</h2>
-      <p>Qual segmento melhor representa o seu negócio?</p>
+      <span class="hud-eyebrow">[AIOX] — SINGLE SOURCE OF TRUTH</span>
+      <h2>Selecione sua Operação</h2>
+      <p>Qual modelo estrutural melhor representa o seu cenário?</p>
     </div>
     <div class="bot-grid" id="botGrid">
       <!-- Injetado via JS -->
@@ -84,7 +94,7 @@
     <div class="chat-header">
       <button class="btn-back" id="btnBackToPicker">← Voltar</button>
       <div class="chat-bot-info">
-        <span class="chat-icon" id="chatHeaderIcon">🤖</span>
+        <span class="chat-icon" id="chatHeaderIcon">_</span>
         <div class="chat-title-group">
           <h3 id="chatHeaderName">Bot</h3>
           <span class="chat-status" id="chatHeaderStatus">Online</span>
@@ -105,7 +115,7 @@
         </div>
       </div>
       <div class="admin-hint">
-        💡 <strong>Modo Gestor:</strong> Como administrador, você recebe resumos estruturados das interações, mas não interfere diretamente no chat público a menos que assuma a conversa.
+        💡 <strong>Modo Assistente:</strong> Como administrador, você recebe resumos estruturados das interações, mas não interfere diretamente no chat público a menos que assuma a conversa.
       </div>
     </div>
 
@@ -126,15 +136,18 @@
 
   <!-- View 4: Conversion Wall Modal -->
   <div id="conversionWall" class="modal-overlay hidden">
-    <div class="modal-content glass-card">
-      <div class="modal-icon">🌟</div>
-      <h2>Chegamos ao limite da demonstração!</h2>
-      <p>Você utilizou as 10 mensagens de teste gratuito.</p>
-      <p>Gostou de ver a inteligência artificial em ação? Para continuar testando, calibrar os prompts e acessar a plataforma completa para gestores, crie sua conta.</p>
+    <div class="modal-content">
+      <span class="hud-eyebrow">[ESC] MODO DE DEMONSTRAÇÃO</span>
+      <h2>Você testou a inteligência superficial. Quer ver os bastidores?</h2>
+      <p>Você atingiu o limite de demonstração da IA. Mas o verdadeiro poder está em como ela foi construída.</p>
+      <p>Crie sua conta gratuita para <strong>desbloquear o Prompt de Engenharia</strong> exato que usamos para dar vida a este assistente e descubra como treinar o seu próprio bot.</p>
       
       <div class="modal-actions">
-        <a href="https://chat.experiasolutions.com.br/register" class="btn-primary full-width" target="_blank">Criar Conta Gratuita</a>
-        <button class="btn-text" id="btnRestartDemo">Testar outro segmento (Reiniciar)</button>
+        <a href="https://chat.experiasolutions.com.br/register" class="btn-aiox-download full-width" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Desbloquear Prompt e Criar Conta
+        </a>
+        <button class="btn-text" id="btnRestartDemo">Testar outro segmento</button>
       </div>
     </div>
   </div>
