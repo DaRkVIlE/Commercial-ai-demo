@@ -1,21 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
   // DOM Elements
   const views = {
-    onboarding: document.getElementById('viewOnboarding'),
     botPicker: document.getElementById('viewBotPicker'),
     chat: document.getElementById('viewChat')
   };
   
-  const adminToggleContainer = document.getElementById('adminToggleContainer');
+  const adminBar = document.getElementById('adminBar');
   const adminSwitch = document.getElementById('adminSwitch');
   const toggleLabel = document.getElementById('toggleLabel');
   const adminDashboard = document.getElementById('adminDashboard');
   
-  const slidesWrapper = document.getElementById('slidesWrapper');
-  const indicators = document.querySelectorAll('.indicator');
-  const btnStartDemo = document.getElementById('btnStartDemo');
   const botGrid = document.getElementById('botGrid');
-  
   const btnBackToPicker = document.getElementById('btnBackToPicker');
   const chatHeaderIcon = document.getElementById('chatHeaderIcon');
   const chatHeaderName = document.getElementById('chatHeaderName');
@@ -29,10 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnRestartDemo = document.getElementById('btnRestartDemo');
 
   // State
-  let currentSlide = 0;
   let activeBot = null;
   let chatHistory = [];
   let isAdminMode = false;
+  
+  // Initialize
+  loadBots();
   
   // ─── Routing / Views ───
   function showView(viewName) {
@@ -45,39 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Show admin toggle only in chat view
     if (viewName === 'chat') {
-      adminToggleContainer.style.display = 'flex';
+      adminBar.style.display = 'flex';
     } else {
-      adminToggleContainer.style.display = 'none';
+      adminBar.style.display = 'none';
       isAdminMode = false;
       adminSwitch.checked = false;
       toggleLabel.textContent = '👤 Atendente';
       adminDashboard.classList.add('hidden');
     }
   }
-
-  // ─── Onboarding Logic ───
-  function goToSlide(index) {
-    currentSlide = index;
-    slidesWrapper.style.transform = `translateX(-${index * 100}%)`;
-    indicators.forEach((ind, i) => {
-      ind.classList.toggle('active', i === index);
-    });
-  }
-
-  indicators.forEach((ind, index) => {
-    ind.addEventListener('click', () => goToSlide(index));
-  });
-
-  // Auto advance slides
-  let slideInterval = setInterval(() => {
-    goToSlide((currentSlide + 1) % indicators.length);
-  }, 4000);
-
-  btnStartDemo.addEventListener('click', () => {
-    clearInterval(slideInterval);
-    loadBots();
-    showView('botPicker');
-  });
 
   // ─── Bot Picker Logic ───
   async function loadBots() {
@@ -86,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const bots = await res.json();
       renderBots(bots);
     } catch (e) {
-      botGrid.innerHTML = '<div class="loading-bots">Erro ao carregar bots. Tente recarregar a página.</div>';
+      botGrid.innerHTML = '<div class="loading-bots">Erro ao carregar agentes. Tente novamente.</div>';
     }
   }
 
@@ -104,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const safeIcon = sanitize(bot.icon);
       const safeName = sanitize(bot.name);
       const safeBusiness = sanitize(bot.business);
-      const safeTagline = sanitize(bot.tagline);
       const safeAccent = sanitize(bot.accent);
       const safeCaps = (bot.capabilities || []).map(c => `<span class="bot-cap-tag">${sanitize(c)}</span>`).join('');
       card.innerHTML = `
@@ -115,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <span>${safeBusiness}</span>
           </div>
         </div>
-        <div class="bot-tagline">${safeTagline}</div>
         <div class="bot-caps">${safeCaps}</div>
       `;
       card.addEventListener('click', () => startChat(id, bot));
@@ -130,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (isAdminMode) {
       adminDashboard.classList.remove('hidden');
-      // Add a mock system message in chat
       addMessage('Sistema (Gestor): Você está vendo a perspectiva do dono do negócio. As mensagens do cliente chegam aqui estruturadas.', 'bot');
     } else {
       adminDashboard.classList.add('hidden');
@@ -149,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
     await updateSessionStatus();
     showView('chat');
     
-    // Real AI greeting via /api/greet
     const typingId = showTypingIndicator();
     try {
       const res = await fetch('/api/greet', {
@@ -190,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({
           botId: activeBot.id,
           message: text,
-          history: chatHistory.slice(-6) // send last 6 messages for context
+          history: chatHistory.slice(-6)
         })
       });
 
@@ -209,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
       addMessage(data.reply, 'bot');
       chatHistory.push({ role: 'assistant', content: data.reply });
       
-      // Update limits
       messageCounter.textContent = `Mensagem ${data.messagesUsed} de ${data.messagesLimit}`;
       if (data.limitReached) {
         setTimeout(showConversionWall, 1500);
@@ -228,10 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function addMessage(text, sender) {
     const div = document.createElement('div');
     div.className = `message msg-${sender}`;
-    // Simple markdown to HTML (just handling line breaks and bold for demo)
     let formattedText = text.replace(/\n/g, '<br>');
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    div.innerHTML = `<p>${formattedText}</p>`;
+    div.innerHTML = formattedText;
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
@@ -269,10 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await fetch('/api/reset', { method: 'POST' });
     } catch(e) {}
-    // Esconde o modal e reseta a UI sem reload (funciona em prod)
     conversionWall.classList.add('hidden');
     messageCounter.textContent = `Mensagem 0 de 10`;
     showView('botPicker');
   });
-  
 });
